@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import Root from "./Root";
 // pages
 import Coins from "./pages/Coins";
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Chart />,
+            loader: () => redirect("chart"),
           },
           {
             path: "chart",
