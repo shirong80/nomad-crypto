@@ -1,6 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../core/services/api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -59,27 +61,22 @@ interface ICoinItem {
 }
 
 export default function Coins() {
-  const [coins, setCoins] = useState<ICoinItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const data = await response.json();
-      setCoins(data.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
+  const { data, isLoading } = useQuery<ICoinItem[]>({
+    queryKey: ["coins"],
+    queryFn: fetchCoins,
+    select: (data) => data.slice(0, 100),
+  });
 
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>loading...</Loader>
       ) : (
         <CoinList>
-          {coins.map((coin) => (
+          {data?.map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <Img
