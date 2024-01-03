@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { IDetailInfo, IPriceInfo } from "../types";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 import { fetchCoinInfo, fetchCoinTickers } from "../core/services/api";
 
 interface ILocationState {
@@ -94,6 +95,8 @@ export default function Coin() {
   const { data: priceData } = useQuery<IPriceInfo>({
     queryKey: ["coinPrice", coinId],
     queryFn: () => fetchCoinTickers(coinId),
+    refetchInterval: 10000,
+    refetchIntervalInBackground: true,
   });
 
   const chartMatch = useMatch("/:coinId/chart");
@@ -101,6 +104,15 @@ export default function Coin() {
   console.log(chartMatch, priceMatch);
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name
+            ? state.name
+            : infoLoading
+            ? "Loading..."
+            : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name
@@ -124,8 +136,8 @@ export default function Coin() {
               <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price:</span>
+              <span>${priceData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

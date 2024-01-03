@@ -61,7 +61,6 @@ export interface IDetailInfo {
   first_data_at: Date;
   last_data_at: Date;
 }
-
 export interface Links {
   explorer: string[];
   facebook: string[];
@@ -70,34 +69,41 @@ export interface Links {
   website: string[];
   youtube: string[];
 }
-
 export interface LinksExtended {
   url: string;
   type: string;
   stats?: Stats;
 }
-
 export interface Stats {
   subscribers?: number;
   contributors?: number;
   stars?: number;
   followers?: number;
 }
-
 export interface Tag {
   id: string;
   name: string;
   coin_counter: number;
   ico_counter: number;
 }
-
 export interface Team {
   id: string;
   name: string;
   position: string;
 }
-
 export interface Whitepaper {
   link: string;
   thumbnail: string;
+}
+
+// *=============================================================
+export interface IHistoryInfo {
+  time_open: string;
+  time_close: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  market_cap: number;
 }
